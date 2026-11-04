@@ -1,0 +1,128 @@
+# Entorno de pruebas del plugin con Roundcube 1.5, 1.6 y 1.7 y un servidor de correo
+# de pruebas (GreenMail, acepta cualquier usuario y contraseña).
+#
+#   docker compose -f docker/docker-compose.yml up -d
+#
+#   Roundcube 1.7.5   http://127.0.0.1:8312
+#   Roundcube 1.6.11  http://127.0.0.1:8311
+#   Roundcube 1.5.10  http://127.0.0.1:8310
+#   Usuario: cualquier dirección @example.com, contraseña: cualquiera
+#
+# Cada versión tiene su propio «worker», que ejecuta bin/worker.php cada minuto
+# igual que lo haría cron en producción.
+
+name: mail-scheduler
+
+x-roundcube-env: &roundcube-env
+  ROUNDCUBEMAIL_DEFAULT_HOST: greenmail
+  ROUNDCUBEMAIL_DEFAULT_PORT: "3143"
+  ROUNDCUBEMAIL_SMTP_SERVER: greenmail
+  ROUNDCUBEMAIL_SMTP_PORT: "3025"
+  ROUNDCUBEMAIL_PLUGINS: mail_scheduler
+  ROUNDCUBEMAIL_SKIN: elastic
+  ROUNDCUBEMAIL_DES_KEY: mail-scheduler-demo-key!
+  TZ: Europe/Madrid
+
+services:
+  greenmail:
+    image: greenmail/standalone:2.1.9
+    environment:
+      GREENMAIL_OPTS: >-
+        -Dgreenmail.setup.test.smtp -Dgreenmail.setup.test.imap
+        -Dgreenmail.auth.disabled -Dgreenmail.hostname=0.0.0.0
+        -Dgreenmail.verbose=false
+    ports:
+      - "127.0.0.1:3326:3025"
+      - "127.0.0.1:3343:3143"
+
+  rc17:
+    image: roundcube/roundcubemail:1.7.5-apache
+    depends_on: [greenmail]
+    environment: *roundcube-env
+    ports:
+      - "127.0.0.1:8312:80"
+    volumes:
+      - rc17-html:/var/www/html
+      - rc17-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+  rc17-worker:
+    image: roundcube/roundcubemail:1.7.5-apache
+    depends_on: [rc17]
+    environment: *roundcube-env
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        while [ ! -f /var/www/html/config/config.docker.inc.php ]; do sleep 2; done;
+        mkdir -p /tmp/roundcube-temp && chown www-data:www-data /tmp/roundcube-temp;
+        while true; do su -s /bin/sh www-data -c 'php /var/www/html/plugins/mail_scheduler/bin/worker.php --verbose'; sleep 60; done
+    volumes:
+      - rc17-html:/var/www/html
+      - rc17-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+  rc16:
+    image: roundcube/roundcubemail:1.6.11-apache
+    depends_on: [greenmail]
+    environment: *roundcube-env
+    ports:
+      - "127.0.0.1:8311:80"
+    volumes:
+      - rc16-html:/var/www/html
+      - rc16-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+  rc16-worker:
+    image: roundcube/roundcubemail:1.6.11-apache
+    depends_on: [rc16]
+    environment: *roundcube-env
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        while [ ! -f /var/www/html/config/config.docker.inc.php ]; do sleep 2; done;
+        mkdir -p /tmp/roundcube-temp && chown www-data:www-data /tmp/roundcube-temp;
+        while true; do su -s /bin/sh www-data -c 'php /var/www/html/plugins/mail_scheduler/bin/worker.php --verbose'; sleep 60; done
+    volumes:
+      - rc16-html:/var/www/html
+      - rc16-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+  rc15:
+    image: roundcube/roundcubemail:1.5.10-apache
+    depends_on: [greenmail]
+    environment: *roundcube-env
+    ports:
+      - "127.0.0.1:8310:80"
+    volumes:
+      - rc15-html:/var/www/html
+      - rc15-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+  rc15-worker:
+    image: roundcube/roundcubemail:1.5.10-apache
+    depends_on: [rc15]
+    environment: *roundcube-env
+    entrypoint: ["sh", "-c"]
+    command:
+      - >-
+        while [ ! -f /var/www/html/config/config.docker.inc.php ]; do sleep 2; done;
+        mkdir -p /tmp/roundcube-temp && chown www-data:www-data /tmp/roundcube-temp;
+        while true; do su -s /bin/sh www-data -c 'php /var/www/html/plugins/mail_scheduler/bin/worker.php --verbose'; sleep 60; done
+    volumes:
+      - rc15-html:/var/www/html
+      - rc15-db:/var/roundcube/db
+      - ./config:/var/roundcube/config:ro
+      - ..:/var/www/html/plugins/mail_scheduler:ro
+
+volumes:
+  rc15-html:
+  rc15-db:
+  rc17-html:
+  rc17-db:
+  rc16-html:
+  rc16-db:

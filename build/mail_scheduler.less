@@ -1,0 +1,814 @@
+/**
+ * Mail Scheduler · estilos
+ *
+ * Se compila una vez por skin con su paleta (build/palettes/<skin>/colors.less),
+ * de modo que el plugin hereda los colores de Elastic o del tema de marca.
+ *
+ * Basado en las convenciones del skin Elastic (c) The Roundcube Dev Team.
+ */
+
+@import (reference) "colors";
+
+@ms-radius: .35rem;
+@ms-icons: 'Icons';
+
+.ms-icon(@code) {
+    content: @code;
+    font-family: @ms-icons;
+    font-weight: 900;
+    font-style: normal;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ------------------------------------------------------------------ */
+/* Menú de Ajustes                                                     */
+/* ------------------------------------------------------------------ */
+
+.listing.iconized li.mail-scheduler > a:before {
+    content: "\f017"; // reloj
+}
+
+.listing.iconized li.mail-autoreply > a:before {
+    content: "\f5ca"; // sombrilla de playa
+}
+
+/* ------------------------------------------------------------------ */
+/* Redactor                                                            */
+/* ------------------------------------------------------------------ */
+
+.toolbar a.schedule:before {
+    content: "\f017";
+}
+
+.formbuttons .ms-schedule-btn {
+    margin-left: .5rem;
+
+    &:before {
+        .ms-icon("\f017");
+        margin-right: .4rem;
+    }
+}
+
+.ms-schedule-dialog {
+    .ui-dialog-buttonset .schedule:before {
+        .ms-icon("\f017");
+        margin-right: .4rem;
+    }
+}
+
+.ms-dialog {
+    font-size: .95rem;
+
+    .ms-section-title {
+        font-size: .78rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: @color-black-shade-text;
+        margin: 1rem 0 .5rem;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    .ms-quick {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .5rem;
+    }
+
+    .ms-quick-item {
+        display: flex;
+        align-items: center;
+        gap: .7rem;
+        width: 100%;
+        padding: .6rem .75rem;
+        text-align: left;
+        color: @color-font;
+        background: #fff;
+        border: 1px solid @color-input-border;
+        border-radius: @ms-radius;
+        cursor: pointer;
+        transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+
+        &:hover {
+            border-color: @color-main;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: @color-main;
+            box-shadow: 0 0 0 .2rem fadeout(@color-main, 75%);
+        }
+
+        &.selected {
+            border-color: @color-main;
+            background: tint(@color-main, 92%);
+            box-shadow: inset 0 0 0 1px @color-main;
+        }
+    }
+
+    .ms-quick-icon {
+        flex: 0 0 2rem;
+        width: 2rem;
+        height: 2rem;
+        line-height: 2rem;
+        border-radius: 50%;
+        text-align: center;
+        color: @color-main;
+        background: tint(@color-main, 88%);
+
+        &:before {
+            .ms-icon("\f017");
+        }
+
+        &.ms-icon-in1h:before { content: "\f252"; }       // reloj de arena
+        &.ms-icon-afternoon:before { content: "\f185"; }  // sol
+        &.ms-icon-tomorrow:before { content: "\f0f4"; }   // café
+        &.ms-icon-tomorrowpm:before { content: "\f185"; }
+        &.ms-icon-monday:before { content: "\f073"; }     // calendario
+    }
+
+    .ms-quick-text {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .ms-quick-label {
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ms-quick-detail {
+        font-size: .82rem;
+        color: @color-black-shade-text;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ms-datetime,
+    .ms-grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: .75rem;
+    }
+
+    .ms-row {
+        margin-top: .9rem;
+    }
+
+    .ms-field {
+        display: block;
+        margin: 0;
+
+        > .ms-label {
+            display: block;
+            font-size: .85rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin: 0 0 .3rem;
+        }
+    }
+
+    .ms-until-row .ms-field {
+        max-width: 50%;
+    }
+
+    .ms-summary-line {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin-top: 1.1rem;
+        padding: .7rem .85rem;
+        border-radius: @ms-radius;
+        color: @color-black-shade-text;
+        background: @color-layout-header-background;
+        border: 1px solid @color-layout-border;
+
+        &:before {
+            .ms-icon("\f1d8"); // avión de papel
+            color: @color-black-shade-text;
+        }
+
+        &.ok {
+            color: @color-font;
+            font-weight: 600;
+            background: tint(@color-main, 92%);
+            border-color: tint(@color-main, 70%);
+
+            &:before {
+                color: @color-main;
+            }
+        }
+    }
+
+    .ms-dialog-error {
+        margin-top: .6rem;
+        padding: .5rem .75rem;
+        border-radius: @ms-radius;
+        color: darken(@color-error, 20%);
+        background: fadeout(@color-error, 88%);
+    }
+
+    .ms-tz {
+        margin-top: .4rem;
+    }
+}
+
+.ms-hint {
+    font-size: .82rem;
+    color: @color-black-shade-text;
+}
+
+.ms-sig-preview {
+    margin-top: .5rem;
+    padding: .5rem .75rem;
+    max-height: 7.5rem;
+    overflow: auto;
+    font-size: .82rem;
+    white-space: pre-wrap;
+    color: @color-black-shade-text;
+    border-left: 3px solid tint(@color-main, 50%);
+    background: @color-layout-header-background;
+    border-radius: 0 @ms-radius @ms-radius 0;
+}
+
+.ms-dialog .ms-sig-preview {
+    max-height: 5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Ajustes · listas                                                    */
+/* ------------------------------------------------------------------ */
+
+.ms-filter {
+    display: flex;
+    gap: .25rem;
+    padding: .5rem .75rem;
+    border-bottom: 1px solid @color-layout-border;
+
+    .ms-filter-btn {
+        flex: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: .35rem;
+        padding: .3rem .5rem;
+        font-size: .85rem;
+        color: @color-black-shade-text;
+        border-radius: @ms-radius;
+        text-decoration: none;
+
+        &:hover {
+            color: @color-font;
+            background: @color-layout-header-background;
+        }
+
+        &.active {
+            color: @color-main;
+            font-weight: 600;
+            background: tint(@color-main, 90%);
+        }
+    }
+
+    .ms-count {
+        min-width: 1.3rem;
+        padding: 0 .35rem;
+        font-size: .72rem;
+        line-height: 1.3rem;
+        font-weight: 700;
+        text-align: center;
+        color: #fff;
+        background: @color-main;
+        border-radius: 1rem;
+    }
+}
+
+.ms-listing {
+    td.name {
+        padding: .65rem .75rem .65rem 2.6rem !important;
+        position: relative;
+        white-space: normal !important;
+        line-height: 1.35;
+
+        &:before {
+            .ms-icon("\f017");
+            position: absolute;
+            left: .9rem;
+            top: .75rem;
+            font-size: 1.05rem;
+            color: @color-list-icon;
+        }
+    }
+
+    tr.ms-status-sent td.name:before {
+        content: "\f00c"; // check
+        color: @color-success;
+    }
+
+    tr.ms-status-failed td.name:before {
+        content: "\f071"; // aviso
+        color: @color-error;
+    }
+
+    tr.ms-status-sending td.name:before {
+        content: "\f1d8";
+        color: @color-main;
+    }
+
+    &#autoreply-table td.name:before {
+        content: "\f5ca";
+    }
+
+    tr.ms-ar-active td.name:before {
+        color: @color-success;
+    }
+
+    tr.ms-ar-off td.name,
+    tr.ms-ar-ended td.name {
+        opacity: .7;
+    }
+
+    .ms-row-top {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+
+    .ms-subject {
+        flex: 1;
+        min-width: 0;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ms-row-meta,
+    .ms-row-when {
+        display: block;
+        font-size: .82rem;
+        color: @color-list-secondary;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .ms-row-when .ms-when:before {
+        .ms-icon("\f133");
+        font-size: .75rem;
+        margin-right: .35rem;
+        opacity: .8;
+    }
+
+    tr.selected .ms-row-meta,
+    tr.selected .ms-row-when {
+        color: @color-font;
+    }
+}
+
+/* Etiquetas de estado */
+.ms-badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: .25rem;
+    flex: 0 0 auto;
+}
+
+.ms-badge {
+    display: inline-block;
+    padding: .1rem .5rem;
+    font-size: .7rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: .02em;
+    border-radius: 1rem;
+    white-space: nowrap;
+    color: darken(@color-main, 10%);
+    background: tint(@color-main, 85%);
+
+    &.ms-badge-retrying {
+        color: darken(@color-warning, 45%);
+        background: tint(@color-warning, 55%);
+    }
+
+    &.ms-badge-sending {
+        color: #fff;
+        background: @color-main;
+    }
+
+    &.ms-badge-sent,
+    &.ms-badge-ar-active {
+        color: darken(@color-success, 18%);
+        background: tint(@color-success, 82%);
+    }
+
+    &.ms-badge-failed {
+        color: darken(@color-error, 20%);
+        background: tint(@color-error, 82%);
+    }
+
+    &.ms-badge-repeat {
+        color: @color-black-shade-text;
+        background: @color-layout-header-background;
+        border: 1px solid @color-layout-border;
+
+        &:before {
+            .ms-icon("\f01e");
+            font-size: .62rem;
+            margin-right: .25rem;
+        }
+    }
+
+    &.ms-badge-ar-off,
+    &.ms-badge-ar-ended {
+        color: @color-black-shade-text;
+        background: @color-layout-header-background;
+        border: 1px solid @color-layout-border;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Ajustes · detalle                                                   */
+/* ------------------------------------------------------------------ */
+
+.ms-detail {
+    .ms-summary {
+        margin-bottom: 1.25rem;
+        padding: 1rem 1.1rem;
+        border: 1px solid @color-layout-border;
+        border-radius: @ms-radius;
+        background: #fff;
+    }
+
+    .ms-summary-head {
+        display: flex;
+        align-items: flex-start;
+        gap: .75rem;
+        margin-bottom: .75rem;
+    }
+
+    .ms-summary-subject {
+        flex: 1;
+        margin: 0;
+        font-size: 1.15rem;
+        font-weight: 600;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    .ms-meta-row {
+        display: flex;
+        gap: .75rem;
+        padding: .2rem 0;
+        font-size: .9rem;
+    }
+
+    .ms-meta-label {
+        flex: 0 0 6.5rem;
+        color: @color-black-shade-text;
+    }
+
+    .ms-meta-value {
+        flex: 1;
+        min-width: 0;
+        word-break: break-word;
+    }
+
+    .ms-attachments {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .35rem;
+    }
+
+    .ms-attachment {
+        display: inline-flex;
+        align-items: center;
+        padding: .1rem .55rem;
+        font-size: .82rem;
+        border-radius: 1rem;
+        background: @color-layout-header-background;
+        border: 1px solid @color-layout-border;
+
+        &:before {
+            .ms-icon("\f0c6"); // clip
+            font-size: .72rem;
+            margin-right: .35rem;
+            color: @color-black-shade-text;
+        }
+
+        .ms-size {
+            margin-left: .25rem;
+            color: @color-black-shade-text;
+        }
+    }
+
+    .ms-stats {
+        margin: .6rem 0 0;
+        font-size: .85rem;
+        color: @color-black-shade-text;
+    }
+
+    .ms-error,
+    .ms-warning {
+        margin: .75rem 0 0;
+    }
+
+    .ms-ar-status {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+        margin-bottom: 1rem;
+
+        .ms-badge {
+            font-size: .78rem;
+            padding: .2rem .7rem;
+        }
+    }
+
+    .ms-ar-status + .ms-error,
+    .ms-ar-status + .ms-warning {
+        margin: 0 0 1rem;
+    }
+
+    .ms-datetime {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+
+        input {
+            width: auto;
+            min-width: 9.5rem;
+            flex: 0 1 12rem;
+        }
+    }
+
+    .ms-inline {
+        display: flex;
+        align-items: center;
+        gap: .6rem;
+
+        .ms-number {
+            width: 6rem;
+            flex: 0 0 6rem;
+        }
+    }
+
+    .ms-unit {
+        color: @color-black-shade-text;
+    }
+
+    .ms-html-toggle {
+        margin-top: .4rem;
+        font-size: .9rem;
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            gap: .4rem;
+            margin: 0;
+        }
+    }
+
+    .ms-preview-box {
+        margin-top: 1rem;
+    }
+
+    .ms-preview {
+        max-height: 22rem;
+        overflow: auto;
+        padding: .9rem 1rem;
+        font-size: .9rem;
+        line-height: 1.5;
+        white-space: normal;
+        word-break: break-word;
+        border: 1px solid @color-layout-border;
+        border-radius: @ms-radius;
+        background: @color-layout-header-background;
+    }
+
+    code {
+        padding: 0 .25rem;
+        font-size: .8rem;
+        color: darken(@color-main, 5%);
+        background: tint(@color-main, 90%);
+        border-radius: .2rem;
+    }
+}
+
+.formbuttons.ms-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+
+    .btn {
+        margin: 0 !important;
+    }
+
+    .ms-btn-cancel {
+        margin-left: auto !important;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Móvil                                                               */
+/* ------------------------------------------------------------------ */
+
+@media screen and (max-width: 480px) {
+    .ms-dialog {
+        .ms-quick,
+        .ms-grid-2 {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .ms-until-row .ms-field {
+            max-width: none;
+        }
+    }
+
+    .ms-detail .ms-meta-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .formbuttons.ms-buttons .ms-btn-cancel {
+        margin-left: 0 !important;
+    }
+}
+
+/* ------------------------------------------------------------------ */
+/* Modo oscuro                                                         */
+/* ------------------------------------------------------------------ */
+
+html.dark-mode {
+    .ms-dialog {
+        .ms-section-title {
+            color: @color-dark-hint;
+        }
+
+        .ms-quick-item {
+            color: @color-dark-font;
+            background: @color-dark-input-background;
+            border-color: @color-dark-border;
+
+            &:hover,
+            &:focus {
+                border-color: @color-dark-main;
+            }
+
+            &.selected {
+                border-color: @color-dark-main;
+                background: @color-dark-list-selected-background;
+                box-shadow: inset 0 0 0 1px @color-dark-main;
+            }
+        }
+
+        .ms-quick-icon {
+            color: @color-dark-font;
+            background: fadeout(@color-dark-main, 55%);
+        }
+
+        .ms-quick-detail {
+            color: @color-dark-hint;
+        }
+
+        .ms-summary-line {
+            color: @color-dark-hint;
+            background: @color-dark-background;
+            border-color: @color-dark-border;
+
+            &.ok {
+                color: @color-dark-font;
+                background: @color-dark-list-selected-background;
+                border-color: @color-dark-main;
+
+                &:before {
+                    color: @color-dark-list-selected;
+                }
+            }
+        }
+
+        .ms-dialog-error {
+            color: #fff;
+            background: @color-dark-error;
+        }
+    }
+
+    .ms-hint {
+        color: @color-dark-hint;
+    }
+
+    .ms-sig-preview {
+        color: @color-dark-hint;
+        background: @color-dark-background;
+        border-left-color: @color-dark-main;
+    }
+
+    .ms-filter {
+        border-color: @color-dark-border;
+
+        .ms-filter-btn {
+            color: @color-dark-hint;
+
+            &:hover {
+                color: @color-dark-font;
+                background: @color-dark-list-selected-background;
+            }
+
+            &.active {
+                color: @color-dark-list-selected;
+                background: @color-dark-list-selected-background;
+            }
+        }
+
+        .ms-count {
+            background: @color-dark-main;
+        }
+    }
+
+    .ms-listing {
+        .ms-row-meta,
+        .ms-row-when {
+            color: @color-dark-hint;
+        }
+
+        tr.selected .ms-row-meta,
+        tr.selected .ms-row-when {
+            color: @color-dark-font;
+        }
+    }
+
+    .ms-badge {
+        color: @color-dark-font;
+        background: fadeout(@color-dark-main, 45%);
+
+        &.ms-badge-retrying {
+            color: #fff;
+            background: @color-dark-warning;
+        }
+
+        &.ms-badge-sending {
+            background: @color-dark-main;
+        }
+
+        &.ms-badge-sent,
+        &.ms-badge-ar-active {
+            color: #fff;
+            background: @color-dark-success;
+        }
+
+        &.ms-badge-failed {
+            color: #fff;
+            background: @color-dark-error;
+        }
+
+        &.ms-badge-repeat,
+        &.ms-badge-ar-off,
+        &.ms-badge-ar-ended {
+            color: @color-dark-hint;
+            background: transparent;
+            border-color: @color-dark-border;
+        }
+    }
+
+    .ms-detail {
+        .ms-summary {
+            background: @color-dark-popover-background;
+            border-color: @color-dark-border;
+        }
+
+        .ms-meta-label,
+        .ms-stats,
+        .ms-unit {
+            color: @color-dark-hint;
+        }
+
+        .ms-attachment {
+            background: @color-dark-background;
+            border-color: @color-dark-border;
+
+            &:before,
+            .ms-size {
+                color: @color-dark-hint;
+            }
+        }
+
+        .ms-preview {
+            color: @color-dark-font;
+            background: @color-dark-background;
+            border-color: @color-dark-border;
+        }
+
+        code {
+            color: @color-dark-list-selected;
+            background: @color-dark-list-selected-background;
+        }
+    }
+}

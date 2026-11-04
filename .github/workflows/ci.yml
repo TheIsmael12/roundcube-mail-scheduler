@@ -1,0 +1,111 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  php-lint:
+    name: PHP ${{ matrix.php }} · sintaxis
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.1', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: php -l
+        shell: bash
+        run: |
+          status=0
+          while IFS= read -r -d '' f; do
+            php -l "$f" > /dev/null || status=1
+          done < <(find . -path ./node_modules -prune -o \( -name '*.php' -o -name '*.inc' -o -name '*.dist' \) -type f -print0)
+          exit $status
+
+  assets:
+    name: Estilos y JavaScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: CSS compilado y plantillas al día
+        run: npm run check
+      - name: Sintaxis JS
+        run: npm run lint:js
+
+  roundcube:
+    name: Roundcube ${{ matrix.version }} · pruebas
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['1.5.10', '1.6.11', '1.7.5']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pruebas unitarias dentro de la imagen oficial
+        run: |
+          docker run --rm \
+            -e ROUNDCUBE_PATH=/usr/src/roundcubemail \
+            -v "$PWD:/plugin:ro" \
+            --entrypoint php \
+            roundcube/roundcubemail:${{ matrix.version }}-apache \
+            /plugin/tests/run.php
+      - name: El worker arranca
+        run: |
+          docker run --rm \
+            -e ROUNDCUBE_PATH=/usr/src/roundcubemail \
+            -v "$PWD:/plugin:ro" \
+            --entrypoint php \
+            roundcube/roundcubemail:${{ matrix.version }}-apache \
+            /plugin/bin/worker.php --help
+
+  database:
+    name: Base de datos · ${{ matrix.db }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        db: [postgres, mariadb]
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: secret
+        ports: ['5432:5432']
+        options: --health-cmd pg_isready --health-interval 5s --health-retries 10
+      mariadb:
+        image: mariadb:11
+        env:
+          MARIADB_ROOT_PASSWORD: secret
+          MARIADB_DATABASE: roundcube
+        ports: ['3306:3306']
+        options: --health-cmd "healthcheck.sh --connect" --health-interval 5s --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Esquema de Roundcube 1.7.5 + esquema del plugin
+        run: |
+          rc() { docker run --rm --entrypoint cat roundcube/roundcubemail:1.7.5-apache "/usr/src/roundcubemail/SQL/$1"; }
+          if [ "${{ matrix.db }}" = postgres ]; then
+            rc postgres.initial.sql | PGPASSWORD=secret psql -h 127.0.0.1 -U postgres -v ON_ERROR_STOP=1 -q
+            PGPASSWORD=secret psql -h 127.0.0.1 -U postgres -v ON_ERROR_STOP=1 -q -f SQL/postgres.initial.sql
+          else
+            rc mysql.initial.sql | mysql -h 127.0.0.1 -uroot -psecret roundcube
+            mysql -h 127.0.0.1 -uroot -psecret roundcube < SQL/mysql.initial.sql
+          fi
+      - name: Operaciones de la capa de datos
+        run: |
+          if [ "${{ matrix.db }}" = postgres ]; then dsn="pgsql://postgres:secret@127.0.0.1/postgres"; else dsn="mysql://root:secret@127.0.0.1/roundcube"; fi
+          docker run --rm --network host             -e ROUNDCUBE_PATH=/usr/src/roundcubemail             -v "$PWD:/plugin:ro"             --entrypoint php             roundcube/roundcubemail:1.7.5-apache             /plugin/tests/db.php "$dsn"

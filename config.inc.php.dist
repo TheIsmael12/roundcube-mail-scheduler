@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * Mail Scheduler · configuración por defecto
+ *
+ * Copia este archivo como config.inc.php y cambia solo lo que necesites.
+ */
+
+// Crear las tablas automáticamente la primera vez que se usa el plugin.
+// Si prefieres hacerlo a mano: bin/initdb.sh --dir=plugins/mail_scheduler/SQL
+$config['mail_scheduler_auto_install'] = true;
+
+// Guardar (cifradas con la des_key de Roundcube) las credenciales del usuario
+// para que el proceso de cron pueda enviar en su nombre, guardar la copia en
+// Enviados y leer la bandeja para las respuestas automáticas.
+// Se borran solas cuando el usuario ya no tiene nada pendiente.
+// Si lo desactivas, el SMTP debe aceptar envíos sin la contraseña del usuario
+// (smtp_user/smtp_pass fijos o relay local) y las respuestas automáticas no
+// podrán leer la bandeja de entrada.
+$config['mail_scheduler_store_credentials'] = true;
+
+// Antelación mínima (segundos) para programar un envío.
+$config['mail_scheduler_min_delay'] = 60;
+
+// Máximo de días hacia el futuro que se permite programar (0 = sin límite).
+$config['mail_scheduler_max_days'] = 365;
+
+// Tamaño máximo de un mensaje programado, en bytes (adjuntos incluidos).
+$config['mail_scheduler_max_size'] = 25 * 1024 * 1024;
+
+// Hora de «mañana por la mañana» y de «esta tarde» en las sugerencias.
+$config['mail_scheduler_morning_hour']   = 8;
+$config['mail_scheduler_afternoon_hour'] = 15;
+
+// Reintentos ante errores temporales del SMTP (5, 15, 60, 180 y 360 minutos).
+$config['mail_scheduler_max_attempts'] = 5;
+
+// Mensajes que procesa el cron en cada pasada.
+$config['mail_scheduler_batch_size'] = 50;
+
+// Días que se conserva el historial de envíos completados (0 = siempre).
+$config['mail_scheduler_keep_days'] = 30;
+
+// Activar las respuestas automáticas (fuera de la oficina, vacaciones…).
+$config['mail_scheduler_autoreply'] = true;
+
+// Días por defecto entre dos respuestas automáticas al mismo remitente.
+$config['mail_scheduler_autoreply_interval'] = 4;
+
+// Registrar la actividad del cron en logs/mail_scheduler.
+$config['mail_scheduler_debug'] = false;

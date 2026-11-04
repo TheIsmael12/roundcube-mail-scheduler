@@ -1,0 +1,24 @@
+{
+    "name": "theismael12/mail_scheduler",
+    "type": "roundcube-plugin",
+    "description": "Programación de envíos (únicos o periódicos, con firma a elegir) y respuestas automáticas de fuera de la oficina para Roundcube Webmail.",
+    "keywords": ["roundcube", "plugin", "schedule", "send later", "scheduled email", "out of office", "vacation", "autoreply"],
+    "homepage": "https://github.com/TheIsmael12/roundcube-mail-scheduler",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "TheIsmael12",
+            "homepage": "https://github.com/TheIsmael12"
+        }
+    ],
+    "require": {
+        "php": ">=7.3.0",
+        "roundcube/plugin-installer": ">=0.1.6"
+    },
+    "extra": {
+        "roundcube": {
+            "min-version": "1.5.0",
+            "sql-dir": "SQL"
+        }
+    }
+}

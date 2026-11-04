@@ -1,0 +1,24 @@
+<roundcube:include file="includes/layout.html" />
+
+<h1 class="voice"><roundcube:label name="mail_scheduler.scheduled" /></h1>
+
+<div class="formcontent ms-detail">
+	<roundcube:object name="plugin.scheduledsummary" id="ms-summary" />
+	<roundcube:object name="plugin.scheduledform" id="ms-form" />
+	<roundcube:object name="plugin.scheduledpreview" id="ms-preview" />
+</div>
+
+<div class="formbuttons ms-buttons">
+	<roundcube:if condition="env:mail_scheduler_status == 'pending' || env:mail_scheduler_status == 'failed'" />
+		<roundcube:button command="plugin.mail_scheduler-save" class="btn btn-primary submit" label="mail_scheduler.reschedule" />
+		<roundcube:if condition="env:mail_scheduler_status == 'failed'" />
+			<roundcube:button command="plugin.mail_scheduler-sendnow" class="btn btn-secondary ms-btn-send" label="mail_scheduler.retry" />
+		<roundcube:else />
+			<roundcube:button command="plugin.mail_scheduler-sendnow" class="btn btn-secondary ms-btn-send" label="mail_scheduler.sendnow" />
+		<roundcube:endif />
+		<roundcube:button command="plugin.mail_scheduler-todraft" class="btn btn-secondary ms-btn-edit" label="mail_scheduler.todraft" />
+		<roundcube:button command="plugin.mail_scheduler-cancel" class="btn btn-danger ms-btn-cancel" label="mail_scheduler.cancelsend" />
+	<roundcube:endif />
+</div>
+
+<roundcube:include file="includes/footer.html" />
