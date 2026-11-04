@@ -47,12 +47,12 @@ Roundcube 1.7.5 con el skin **Elastic** (el estándar de Roundcube).
 </details>
 
 <details>
-<summary>Con los temas NextAura, Imora y Salud en Ruta</summary>
+<summary>Con los temas NextAura, Imora, Salud en Ruta y Vértice</summary>
 
-| NextAura | Imora | Salud en Ruta |
-|---|---|---|
-| ![NextAura](docs/capturas/temas/nextaura-redactar.png) | ![Imora](docs/capturas/temas/imora-redactar.png) | ![Salud en Ruta](docs/capturas/temas/saludenruta-redactar.png) |
-| ![NextAura](docs/capturas/temas/nextaura-programados.png) | ![Imora](docs/capturas/temas/imora-programados.png) | ![Salud en Ruta](docs/capturas/temas/saludenruta-programados.png) |
+| NextAura | Imora | Salud en Ruta | Vértice |
+|---|---|---|---|
+| ![NextAura](docs/capturas/temas/nextaura-redactar.png) | ![Imora](docs/capturas/temas/imora-redactar.png) | ![Salud en Ruta](docs/capturas/temas/saludenruta-redactar.png) | ![Vértice](docs/capturas/temas/vertice-redactar.png) |
+| ![NextAura](docs/capturas/temas/nextaura-programados.png) | ![Imora](docs/capturas/temas/imora-programados.png) | ![Salud en Ruta](docs/capturas/temas/saludenruta-programados.png) | ![Vértice](docs/capturas/temas/vertice-programados.png) |
 
 </details>
 
@@ -179,6 +179,7 @@ Incluye estilos para:
 | `nextaura` | [NextAura](https://github.com/TheIsmael12/nextaura-roundcube) |
 | `imora` | [Imora](https://github.com/TheIsmael12/imora-roundcube) |
 | `saludenruta` | [Salud en Ruta](https://github.com/TheIsmael12/serad-roundcube) |
+| `vertice` | [Vértice Gestión Empresarial](https://github.com/TheIsmael12/vertice-roundcube) |
 
 ### Añadir otro skin derivado de Elastic
 

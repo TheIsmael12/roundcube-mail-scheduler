@@ -1,5 +1,9 @@
 # Changelog
 
+## Sin publicar
+
+- Estilos para el skin **Vértice** (Vértice Gestión Empresarial).
+
 ## 1.0.0 — 2026-11-04
 
 Primera versión.
