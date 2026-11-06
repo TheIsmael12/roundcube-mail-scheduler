@@ -8,6 +8,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-37beff?style=flat-square)](LICENSE)
 [![Roundcube](https://img.shields.io/badge/Roundcube-1.5%20–%201.7.5-2f3a3f?style=flat-square)](https://roundcube.net/)
 [![PHP](https://img.shields.io/badge/PHP-7.3%20–%208.4-777bb4?style=flat-square)](https://www.php.net/)
+![Visitas](https://visitor-badge.laobi.icu/badge?page_id=TheIsmael12.roundcube-mail-scheduler&left_text=visitas&right_color=%2337beff)
 
 </div>
 
